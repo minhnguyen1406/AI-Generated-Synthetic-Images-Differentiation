@@ -45,16 +45,19 @@ else:
 
 
 """Data load & Data preprocessing"""
-# downloading the CIFAKE dataset and preprocess if needed
+#TODO: download and import the CIFAKE dataset and preprocess if needed
 
 
 """Creating the network"""
+#TODO: Create a CNN (combine with GAN if time allowed)
 
 
 """Train"""
+#TODO: Train: forward, loss calculation, optimizer, accuracy calculation, etc.
 
 
 """Test"""
+#TODO: Test: loss calculation, optimizer, accuracy , etc.
 
 
 
