@@ -12,6 +12,11 @@ import os
 from pathlib import Path
 import gc
 import matplotlib.pyplot as plt
+import torch.utils.data
+from PIL import Image
+import matplotlib
+import matplotlib.pyplot as plt
+
 
 # hyperparameters
 batch_size = 128
@@ -45,8 +50,67 @@ else:
 
 
 """Data load & Data preprocessing"""
-#TODO: download and import the CIFAKE dataset and preprocess if needed - Efe
+#Download CIFAKE Dataset (storing in my google drive, which is open to anyone with the link)
+!gdown 1I2EfjlbiZ1sAk33AbGNhvPZROnQVt52U
+!unzip archive.zip -d CIFAKE/
 
+
+class CIFAKE(torch.utils.data.Dataset):
+
+  # Initialize the class e.g. load files, preprocess, etc.
+  def __init__(self, split = 'train', transform = None):
+
+    self.categories = ['FAKE', 'REAL']
+    self.category2index = {category: idx for (idx, category) in enumerate(self.categories)}
+    self.transform = transform
+
+    # Compile a list of images and corresponding labels.
+    self.imagepaths = []
+    self.labels = []
+    for category in self.categories:
+      category_directory = 'CIFAKE/' + split +'/'+ category
+      category_imagenames = os.listdir(category_directory)
+      self.imagepaths += [os.path.join(category_directory, imagename)
+                          for imagename in category_imagenames]
+      self.labels += [self.category2index[category]] * len(category_imagenames)
+
+    # Sort imagepaths alphabetically and labels accordingly.
+    sorted_pairs = sorted(zip(self.imagepaths, self.labels), key = lambda x: x[0])
+    self.imagepaths, self.labels = zip(*sorted_pairs)
+
+
+  # Return a sample (x, y) as a tuple e.g. (image, label)
+  def __getitem__(self, index):
+    image = Image.open(self.imagepaths[index]).convert('RGB')
+    if self.transform:
+      image = self.transform(image)
+    return image, self.labels[index]
+
+  # Return the total number of samples.
+  def __len__(self):
+    return len(self.imagepaths)
+
+
+#This is just a test to see a plot a sample image from the Dataset
+#we can also pass in an optional transform if we plan to do any sort of Data Augmentation ahead of training
+trainset = CIFAKE(split = 'train')
+print(len(trainset))
+image_index = 70000 
+
+
+print('This dataset has {0} training images'.format(len(trainset)))
+img, label = trainset[image_index]  # Returns image and label.
+
+print('Image {0} is {1}'.format(image_index, trainset.categories[label]))
+print('Image size is {0}x{1}'.format(img.height, img.width))
+
+# Show the image.
+# Added bilinear interpolation just to smoothen the image (totally optional)
+plt.figure()
+plt.imshow(img, interpolation='bilinear')
+plt.grid(False)
+plt.axis('off')
+plt.show()
 
 """Creating the network"""
 #TODO: Create a CNN (combine with GAN if time allowed) - Minh
