@@ -113,8 +113,33 @@ plt.axis('off')
 plt.show()
 
 """Creating the network"""
-#TODO: Create a CNN (combine with GAN if time allowed) - Minh
+class CNN(nn.Module):
+    def __init__(self, image_size=32):
+        super(CNN, self).__init__()
+        self.model = nn.Sequential(
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Flatten(),
+            nn.Linear(32 * (image_size // 4) * (image_size // 4), 64),
+            nn.ReLU(),
+            nn.Linear(64, 1),
+            nn.Sigmoid()
+        )
 
+    def forward(self, x):
+        return self.model(x)
+
+# Image size in the dataset is 32
+model = CNN(image_size=32)
+
+if cuda:
+    model.cuda()
+
+optimizer = optim.Adam(model.parameters(), lr=lr)
 
 """Train"""
 #TODO: Train: forward, loss calculation, optimizer, accuracy calculation, etc. - Steve
