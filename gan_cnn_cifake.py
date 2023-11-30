@@ -122,10 +122,35 @@ plt.show()
 
 """Test"""
 #TODO: Test: loss calculation, optimizer, accuracy , etc. - Alex
-# TEST
-# TEST
-# test edit 1
-# TEST
-# test edit 2 (delete)
+def test(epoch):
+    model.eval()  # Set the model to evaluation mode
+
+    criterion = nn.CrossEntropyLoss()
+    test_loss = 0
+    correct = 0
+
+    with torch.no_grad():  # Disable gradient computation during testing
+        for data, target in test_loader:
+            
+            # data = data.view(-1, 28, 28)
+            output = model(data)  # Forward pass
+
+            test_loss += criterion(output, target).item()
+
+            # Get the index of the max log-probability as the predicted label
+            pred = output.max(1, keepdim=True)[1]
+            correct += pred.eq(target.view_as(pred)).sum().item()
+
+    test_loss /= len(test_loader.dataset)
+
+    print(f'Test set: Average loss: {test_loss:.4f}')
+    
+    accuracy = 100. * correct / len(test_loader.dataset)
+    print(f'Testing Accuracy: {accuracy:.2f}%')
+    
+    # writer.add_scalar("Testing loss", test_loss, epoch)
+    writer.add_scalar("Testing Accuracy", accuracy, epoch)
+    return accuracy
+
 
 
