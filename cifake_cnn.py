@@ -49,10 +49,10 @@ else:
     torch.manual_seed(seed)
 
 
-"""Data load & Data preprocessing"""
-#Download CIFAKE Dataset (storing in my google drive, which is open to anyone with the link)
-!gdown 1I2EfjlbiZ1sAk33AbGNhvPZROnQVt52U
-!unzip archive.zip -d CIFAKE/
+# """Data load & Data preprocessing"""
+# #Download CIFAKE Dataset (storing in my google drive, which is open to anyone with the link)
+# !gdown 1I2EfjlbiZ1sAk33AbGNhvPZROnQVt52U
+# !unzip archive.zip -d CIFAKE/
 
 
 class CIFAKE(torch.utils.data.Dataset):
@@ -142,7 +142,6 @@ if cuda:
 optimizer = optim.Adam(model.parameters(), lr=lr)
 
 """Train"""
-#TODO: Train: forward, loss calculation, optimizer, accuracy calculation, etc. - Steve
 eps = 1e-13
 def train(epoch):
    model.train()
@@ -168,18 +167,17 @@ def train(epoch):
         n_iter = (epoch - 1) * len(train_loader) + batch_idx + 1
         writer.add_scalar('train/loss', loss.data.item(), n_iter)
 
-    # Not sure if we need all of this. Looks like its writing to a histogram.
-    # Log model parameters to TensorBoard at every epoch
-    for name, param in model.named_parameters():
-        layer, attr = os.path.splitext(name)
-        attr = attr[1:]
-        writer.add_histogram(
-            f'{layer}/{attr}',
-            param.clone().cpu().data.numpy(),
-            n_iter)
+        # Not sure if we need all of this. Looks like its writing to a histogram.
+        # Log model parameters to TensorBoard at every epoch
+        for name, param in model.named_parameters():
+            layer, attr = os.path.splitext(name)
+            attr = attr[1:]
+            writer.add_histogram(
+                f'{layer}/{attr}',
+                param.clone().cpu().data.numpy(),
+                n_iter)
 
 """Test"""
-#TODO: Test: loss calculation, optimizer, accuracy , etc. - Alex
 def test(epoch):
     model.eval()  # Set the model to evaluation mode
 
