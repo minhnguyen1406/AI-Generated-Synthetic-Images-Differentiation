@@ -143,7 +143,40 @@ optimizer = optim.Adam(model.parameters(), lr=lr)
 
 """Train"""
 #TODO: Train: forward, loss calculation, optimizer, accuracy calculation, etc. - Steve
+eps = 1e-13
+def train(epoch):
+   model.train()
+   criterion = nn.BCELoss() # using binary loss function
+   
+   for batch_idx, (data, target) in enumerate(train_loader):
+        if cuda:
+            data, target = data.cuda(), target.cuda()
+        data, target = Variable(data), Variable(target)
 
+        optimizer.zero_grad()
+        output = model(data)
+        loss = criterion(torch.log(output+eps), target)
+        loss.backward()
+        optimizer.step()
+
+        if batch_idx % logging_interval == 0:
+            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                epoch, batch_idx * len(data), len(train_loader.dataset),
+                100. * batch_idx / len(train_loader), loss.data.item() )
+            )
+
+        n_iter = (epoch - 1) * len(train_loader) + batch_idx + 1
+        writer.add_scalar('train/loss', loss.data.item(), n_iter)
+
+    # Not sure if we need all of this. Looks like its writing to a histogram.
+    # Log model parameters to TensorBoard at every epoch
+    for name, param in model.named_parameters():
+        layer, attr = os.path.splitext(name)
+        attr = attr[1:]
+        writer.add_histogram(
+            f'{layer}/{attr}',
+            param.clone().cpu().data.numpy(),
+            n_iter)
 
 """Test"""
 #TODO: Test: loss calculation, optimizer, accuracy , etc. - Alex
