@@ -1,5 +1,5 @@
 # AI-Generated-Synthetic-Images-Differentiation
-### Minh Nguyen, Efe Eboreime, Steve Hudgson, and Weixiao Liao
+### Efe Eboreime, Steve Hudgson, Weixiao Liao and Minh Nguyen
 
 
 #### Overview
