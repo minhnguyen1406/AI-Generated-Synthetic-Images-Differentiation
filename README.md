@@ -19,6 +19,9 @@ for bolstering cybersecurity and ensuring data trustworthiness.
 Future research avenues include exploring the integration of
 Generative Adversarial Networks (GANs) alongside the exist-
 ing CNN architecture for potential performance enhancements
+
+![Dataset](dataset_samples.jpg)
+
 #### Methodology
 
 - Dataset: CIFAKE
