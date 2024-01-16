@@ -1,4 +1,4 @@
-# AI-Generated-Synthetic-Images-Differentiation
+# AI-Generated Synthetic Images Differentiation
 ### Efe Eboreime, Steve Hudgson, Weixiao Liao and Minh Nguyen
 
 
