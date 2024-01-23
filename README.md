@@ -1,5 +1,4 @@
 # AI-Generated Synthetic Images Differentiation
-## COMP 576 Final Project
 #### Efe Eboreime, Steve Hudgson, Weixiao Liao and Minh Nguyen
 
 
